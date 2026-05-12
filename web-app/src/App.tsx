@@ -84,7 +84,12 @@ function App() {
           <div className="absolute inset-0 z-0 transition-opacity duration-1000">
             <Canvas camera={{ position: [0, 0, 8], fov: 45 }}>
               <Effects />
-              <TarotCard drawnCard={drawnCard} onDraw={handleDraw} isFlipped={isFlipped} />
+              <TarotCard
+                drawnCard={drawnCard}
+                onDraw={handleDraw}
+                isFlipped={isFlipped}
+                isActivated={isQuestionLocked}
+              />
             </Canvas>
           </div>
 
