@@ -1,0 +1,1 @@
+@tailwind base;`n@tailwind components;`n@tailwind utilities;`n`nbody {`n  margin: 0;`n  background-color: #000;`n  color: white;`n  overflow: hidden; /* 防止3D画布出现滚动条 */`n}

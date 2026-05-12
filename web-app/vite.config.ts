@@ -1,0 +1,1 @@
+import { defineConfig } from "vite"`nimport react from "@vitejs/plugin-react"`n`n// https://vitejs.dev/config/`nexport default defineConfig({`n  plugins: [react()],`n  base: "./", // 这里必须配置为相对路径，否则部署到 GitHub Pages 会提示找不到资源`n})
