@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+ï»¿import { useState, useRef, useEffect } from "react";
 
 type QuestionInputProps = {
   onSubmit: (question: string) => void;
@@ -34,7 +34,7 @@ export default function QuestionInput({ onSubmit, isVisible }: QuestionInputProp
           type="text"
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
-          placeholder="ÔÚ´ËÊäÈëÄãµÄÖ´Äî»òÒÉÍÅ......"
+          placeholder="åœ¨æ­¤è¾“å…¥ä½ çš„æ‰§å¿µæˆ–ç–‘å›¢......"
           className="w-full bg-transparent border-b border-white/20 px-4 py-3 text-center text-white/90 focus:outline-none focus:border-white/60 focus:bg-white/5 transition-all font-light text-lg placeholder-white/20"
         />
         <button 
@@ -46,7 +46,7 @@ export default function QuestionInput({ onSubmit, isVisible }: QuestionInputProp
               : "border-white/10 text-white/20 cursor-not-allowed"
           }`}
         >
-          ×¢ Èë ¹Û ²â
+          æ³¨ å…¥ è§‚ æµ‹
         </button>
       </form>
     </div>
