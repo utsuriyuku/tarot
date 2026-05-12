@@ -1,11 +1,65 @@
-﻿@tailwind base;
+﻿@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap');
+
+@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  color-scheme: dark;
+}
+
 body {
   margin: 0;
-  background-color: #000;
+  min-height: 100vh;
+  background-color: #04050a;
+  background-image:
+    radial-gradient(circle at top, rgba(69, 126, 255, 0.18), transparent 32%),
+    radial-gradient(circle at bottom left, rgba(15, 160, 138, 0.14), transparent 28%),
+    linear-gradient(180deg, #070910 0%, #04050a 44%, #03040a 100%);
   color: white;
-  overflow: hidden; /* 防止3D画布出现滚动条 */
+  font-family: "Manrope", "Segoe UI", sans-serif;
+  overflow: hidden;
+}
+
+h1,
+h2,
+h3 {
+  font-family: "Cormorant Garamond", Georgia, serif;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+::selection {
+  background: rgba(103, 232, 249, 0.25);
+  color: white;
+}
+
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.16);
 }
 

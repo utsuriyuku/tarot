@@ -60,61 +60,94 @@ function App() {
   };
 
   return (
-    <div className="w-screen h-screen bg-black relative font-sans overflow-hidden">
-      {/* 终端配置按钮 */} 
-      <button 
-        onClick={() => setIsSettingsOpen(true)}
-        className="absolute top-8 right-8 z-50 text-white/30 hover:text-white/90 tracking-widest text-xs font-light transition-all duration-300 backdrop-blur-sm px-4 py-2 border border-transparent hover:border-white/20 rounded-full flex items-center gap-2"
-      >
-        <span className="w-1.5 h-1.5 rounded-full bg-white/50 inline-block animate-pulse"></span>
-        终端配置
-      </button>
+    <div className="relative min-h-screen overflow-hidden bg-[#04050a] text-white">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(89,118,255,0.16),_transparent_34%),radial-gradient(circle_at_bottom_left,_rgba(0,181,173,0.16),_transparent_30%),linear-gradient(180deg,_#06070d_0%,_#04050a_48%,_#020308_100%)]" />
+      <div className="pointer-events-none absolute inset-0 opacity-25 [background-image:linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] [background-size:96px_96px] [mask-image:radial-gradient(circle_at_center,black,transparent_85%)]" />
 
-      {/* 顶部标题与引导文案 */}
-      <div className={`absolute top-0 left-0 w-full h-[30%] pointer-events-none z-10 flex flex-col items-center justify-end p-8 transition-all duration-1000 ${isFlipped ? "opacity-0 -translate-y-10" : "opacity-100"}`}>
-        <h1 className="text-[2.5rem] font-extralight tracking-[0.4em] text-white/90 select-none uppercase blur-[0.3px]">
-          Quantum Tarot
-        </h1>
-        <p className="mt-6 text-white/40 tracking-[0.2em] text-[0.85rem] font-light flex flex-col items-center gap-1">
-          <span>「时间失去刻度，抽取即是未来向此刻的投射」</span>
-          {isQuestionLocked ? (
-            <span className="text-white/60 text-xs mt-4 animate-pulse">意念已锁定。点击悬浮卡面，触碰量子坍缩。</span>
-          ) : (
-            <span className="text-white/20 text-xs mt-4">请于下方凝聚你的意图</span>
+      <header className="absolute inset-x-0 top-0 z-30 flex items-center justify-between px-5 py-5 md:px-8 md:py-7">
+        <div className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-[11px] uppercase tracking-[0.35em] text-white/55 backdrop-blur-xl">
+          Quantum Tarot Interface
+        </div>
+        <button
+          onClick={() => setIsSettingsOpen(true)}
+          className="flex items-center gap-3 rounded-full border border-white/10 bg-black/35 px-4 py-2 text-[11px] uppercase tracking-[0.28em] text-white/70 backdrop-blur-xl transition hover:border-white/25 hover:bg-white/10 hover:text-white"
+        >
+          <span className="h-2 w-2 rounded-full bg-cyan-300 shadow-[0_0_16px_rgba(103,232,249,0.95)]" />
+          模型接口
+        </button>
+      </header>
+
+      <main className="relative z-10 flex min-h-screen items-center justify-center px-3 py-20 md:px-8">
+        <section className="relative h-[88vh] min-h-[720px] w-full max-w-[1480px] overflow-hidden rounded-[32px] border border-white/10 bg-black/20 shadow-[0_40px_140px_rgba(0,0,0,0.65)] backdrop-blur-2xl">
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(255,255,255,0.06),_transparent_32%),linear-gradient(135deg,rgba(255,255,255,0.08),transparent_24%,transparent_76%,rgba(255,255,255,0.04))]" />
+
+          <div className="absolute inset-0 z-0 transition-opacity duration-1000">
+            <Canvas camera={{ position: [0, 0, 8], fov: 45 }}>
+              <Effects />
+              <TarotCard drawnCard={drawnCard} onDraw={handleDraw} isFlipped={isFlipped} />
+            </Canvas>
+          </div>
+
+          <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-full max-w-[560px] p-6 md:p-10">
+            <div className="max-w-[460px] rounded-[28px] border border-white/10 bg-black/28 p-6 shadow-[0_24px_80px_rgba(0,0,0,0.35)] backdrop-blur-xl md:p-8">
+              <p className="text-[11px] uppercase tracking-[0.4em] text-cyan-200/70">Nonlinear Reading Engine</p>
+              <h1 className="mt-4 font-serif text-5xl font-semibold leading-none text-white md:text-7xl">
+                Quantum Tarot
+              </h1>
+              <p className="mt-5 text-sm leading-7 text-white/72 md:text-[15px]">
+                这不是一个把牌义贴给你的占卜页，而是把问题、卡面与未来牵引感放在同一张界面里。你先给出意图，系统再允许你触碰坍缩。
+              </p>
+
+              <div className="mt-7 flex flex-wrap gap-3 text-xs tracking-[0.16em] text-white/70">
+                <span className="rounded-full border border-white/10 bg-white/5 px-3 py-2">Three.js 粒子场</span>
+                <span className="rounded-full border border-white/10 bg-white/5 px-3 py-2">大模型解牌</span>
+                <span className="rounded-full border border-white/10 bg-white/5 px-3 py-2">正逆位动态呈现</span>
+              </div>
+
+              <div className="mt-8 rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+                <p className="text-[11px] uppercase tracking-[0.28em] text-white/45">Current Ritual State</p>
+                <p className="mt-3 text-sm leading-6 text-white/78">
+                  {isFlipped
+                    ? "牌面已坍缩。右侧面板正在给出本轮解读。"
+                    : isQuestionLocked
+                      ? `意图已锁定：${userQuestion}`
+                      : "先写下真正的问题，再去点击中央悬浮的卡牌。"}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="pointer-events-none absolute bottom-6 left-6 z-10 hidden rounded-2xl border border-white/10 bg-black/30 p-4 text-[11px] uppercase tracking-[0.24em] text-white/45 backdrop-blur-xl md:block">
+            01 锁定问题 · 02 触碰卡面 · 03 等待解牌
+          </div>
+
+          <div className={`absolute inset-x-0 bottom-6 z-20 flex justify-center px-4 transition-all duration-700 ${isFlipped ? "translate-y-10 opacity-0" : "translate-y-0 opacity-100"}`}>
+            <QuestionInput
+              onSubmit={handleQuestionSubmit}
+              isVisible={!isQuestionLocked && !isFlipped}
+            />
+          </div>
+
+          {isQuestionLocked && !isFlipped && (
+            <div className="pointer-events-none absolute bottom-28 left-1/2 z-20 -translate-x-1/2 rounded-full border border-cyan-300/20 bg-cyan-300/10 px-5 py-3 text-xs tracking-[0.28em] text-cyan-100 shadow-[0_0_40px_rgba(34,211,238,0.2)]">
+              意图已锁定，点击卡牌开始本轮观测
+            </div>
           )}
-        </p>
-      </div>
 
-      {/* 意念输入组件 */}
-      <QuestionInput 
-        onSubmit={handleQuestionSubmit} 
-        isVisible={!isQuestionLocked && !isFlipped}
-      />
+          <div className={`absolute inset-y-0 right-0 z-20 w-full max-w-[460px] transition-all duration-1000 ${isFlipped ? "translate-x-0 opacity-100" : "translate-x-full opacity-0 pointer-events-none"}`}>
+            {drawnCard && (
+              <InterpretationPanel
+                card={drawnCard}
+                text={interpretation}
+                isThinking={isInterpreting}
+                onClear={handleClear}
+              />
+            )}
+          </div>
+        </section>
+      </main>
 
-      {/* 3D 渲染层 */}
-      <div className={`w-full h-full z-0 transition-opacity duration-1000 ${isQuestionLocked ? "opacity-100 cursor-pointer" : "opacity-30 pointer-events-none hover:cursor-not-allowed"}`}>
-        <Canvas camera={{ position: [0, 0, 8], fov: 45 }}>
-          <Effects />
-          <TarotCard drawnCard={drawnCard} onDraw={handleDraw} isFlipped={isFlipped} />
-        </Canvas>
-      </div>
-
-      {/* 解牌面板 */}
-      <div className={`transition-all duration-1000 pointer-events-none ${isFlipped ? "opacity-100 translate-x-0" : "opacity-0 translate-x-[400px]"}`}>
-        {drawnCard && (
-          <InterpretationPanel 
-            card={drawnCard}
-            text={interpretation}
-            isThinking={isInterpreting}
-            onClear={handleClear}
-          />
-        )}
-      </div>
-
-      {/* 设置面板 */}
-      {isSettingsOpen && (
-        <SettingsPanel onClose={() => setIsSettingsOpen(false)} />
-      )}
+      {isSettingsOpen && <SettingsPanel onClose={() => setIsSettingsOpen(false)} />}
     </div>
   );
 }
