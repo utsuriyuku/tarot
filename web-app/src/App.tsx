@@ -139,7 +139,7 @@ function App() {
             </div>
           )}
 
-          <div className={`absolute inset-y-0 right-0 z-20 w-full max-w-[460px] transition-all duration-1000 ${isFlipped ? "translate-x-0 opacity-100" : "translate-x-full opacity-0 pointer-events-none"}`}>
+          <div className={`absolute inset-y-0 right-0 z-20 w-full max-w-[620px] transition-all duration-1000 ${isFlipped ? "translate-x-0 opacity-100" : "translate-x-full opacity-0 pointer-events-none"}`}>
             {drawnCard && (
               <InterpretationPanel
                 card={drawnCard}
