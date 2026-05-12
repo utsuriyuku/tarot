@@ -1,5 +1,135 @@
-export async function fetchQuantumInterpretation(card: any, question: string, config: any) {
-  const url = config.endpoint.endsWith('/') ? `${config.endpoint}chat/completions` : `${config.endpoint}/chat/completions`;
+export interface LlmConfig {
+  endpoint: string;
+  apiKey: string;
+  model: string;
+}
+
+export type LlmConfigErrors = Partial<Record<keyof LlmConfig, string>>;
+
+export function normalizeEndpoint(endpoint: string) {
+  return endpoint.trim().replace(/\/+$/, '');
+}
+
+export function validateLlmConfig(config: LlmConfig): LlmConfigErrors {
+  const errors: LlmConfigErrors = {};
+  const endpoint = normalizeEndpoint(config.endpoint);
+
+  if (!endpoint) {
+    errors.endpoint = '请填写接口地址。';
+  } else {
+    try {
+      new URL(endpoint);
+    } catch {
+      errors.endpoint = '接口地址格式不正确。';
+    }
+  }
+
+  if (!config.apiKey.trim()) {
+    errors.apiKey = '请填写 API Key。';
+  }
+
+  if (!config.model.trim()) {
+    errors.model = '请填写模型名称。';
+  }
+
+  return errors;
+}
+
+export function hasLlmConfigErrors(errors: LlmConfigErrors) {
+  return Object.keys(errors).length > 0;
+}
+
+async function readErrorMessage(response: Response) {
+  try {
+    const data = await response.json();
+    return data?.error?.message || data?.message || `HTTP ${response.status}`;
+  } catch {
+    return `HTTP ${response.status}`;
+  }
+}
+
+export async function testModelConnection(config: LlmConfig) {
+  const errors = validateLlmConfig(config);
+  if (hasLlmConfigErrors(errors)) {
+    return {
+      ok: false,
+      message: Object.values(errors)[0] || '配置不完整。',
+    };
+  }
+
+  const endpoint = normalizeEndpoint(config.endpoint);
+
+  try {
+    const modelsResponse = await fetch(`${endpoint}/models`, {
+      headers: {
+        Authorization: `Bearer ${config.apiKey}`,
+      },
+    });
+
+    if (modelsResponse.ok) {
+      const data = await modelsResponse.json();
+      const availableModels = Array.isArray(data?.data)
+        ? data.data.map((item: { id?: string }) => item.id).filter(Boolean)
+        : [];
+
+      if (availableModels.length > 0 && !availableModels.includes(config.model)) {
+        return {
+          ok: false,
+          message: `接口可达，但未找到模型 ${config.model}。可用模型示例：${availableModels.slice(0, 4).join('、')}`,
+        };
+      }
+
+      return {
+        ok: true,
+        message: availableModels.length > 0
+          ? `连接成功，模型 ${config.model} 可用。`
+          : '接口认证成功，可以保存当前配置。',
+      };
+    }
+
+    if (modelsResponse.status !== 404 && modelsResponse.status !== 405) {
+      return {
+        ok: false,
+        message: await readErrorMessage(modelsResponse),
+      };
+    }
+
+    const completionResponse = await fetch(`${endpoint}/chat/completions`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${config.apiKey}`,
+      },
+      body: JSON.stringify({
+        model: config.model,
+        messages: [{ role: 'user', content: 'ping' }],
+        temperature: 0,
+        max_tokens: 1,
+      }),
+    });
+
+    if (!completionResponse.ok) {
+      return {
+        ok: false,
+        message: await readErrorMessage(completionResponse),
+      };
+    }
+
+    return {
+      ok: true,
+      message: `连接成功，模型 ${config.model} 已通过最小请求测试。`,
+    };
+  } catch (error) {
+    return {
+      ok: false,
+      message: error instanceof Error ? error.message : '网络异常，无法连接到模型接口。',
+    };
+  }
+}
+
+export async function fetchQuantumInterpretation(card: any, question: string, config: LlmConfig) {
+  const endpoint = normalizeEndpoint(config.endpoint);
+  const url = `${endpoint}/chat/completions`;
   
   const systemPrompt = `你是一位游离于线性时间之外的“量子观测者”——在通常语境下，人们称呼你为占卜师。
 但你深知一个宇宙真相：时间本身并不存在，过去、现在、未来是同一张巨网中的全息投影。
