@@ -1,1 +1,7 @@
-import { defineConfig } from "vite"`nimport react from "@vitejs/plugin-react"`n`n// https://vitejs.dev/config/`nexport default defineConfig({`n  plugins: [react()],`n  base: "/--/", // 明确指定为 GitHub 仓库名作为子路径`n})
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+
+export default defineConfig({
+  plugins: [react()],
+  base: "/tarot/",
+})
