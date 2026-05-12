@@ -21,12 +21,12 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
-  background-color: #04050a;
+  background-color: #0b0907;
   background-image:
-    radial-gradient(circle at top, rgba(69, 126, 255, 0.18), transparent 32%),
-    radial-gradient(circle at bottom left, rgba(15, 160, 138, 0.14), transparent 28%),
-    linear-gradient(180deg, #070910 0%, #04050a 44%, #03040a 100%);
-  color: white;
+    radial-gradient(circle at top, rgba(178, 135, 76, 0.18), transparent 30%),
+    radial-gradient(circle at bottom left, rgba(112, 76, 43, 0.14), transparent 28%),
+    linear-gradient(180deg, #17120e 0%, #0f0b08 44%, #080605 100%);
+  color: #f5eee1;
   font-family: "Manrope", "Segoe UI", sans-serif;
   overflow: hidden;
 }
@@ -45,13 +45,22 @@ select {
 }
 
 ::selection {
-  background: rgba(103, 232, 249, 0.25);
+  background: rgba(205, 162, 94, 0.3);
   color: white;
+}
+
+.paper-grain {
+  background-image:
+    repeating-linear-gradient(0deg, rgba(255, 240, 214, 0.028) 0, rgba(255, 240, 214, 0.028) 1px, transparent 1px, transparent 3px),
+    repeating-linear-gradient(90deg, rgba(178, 135, 76, 0.018) 0, rgba(178, 135, 76, 0.018) 1px, transparent 1px, transparent 4px),
+    radial-gradient(circle at 20% 20%, rgba(255, 247, 230, 0.04), transparent 22%),
+    radial-gradient(circle at 80% 65%, rgba(166, 120, 67, 0.045), transparent 26%);
+  mix-blend-mode: screen;
 }
 
 .custom-scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+  scrollbar-color: rgba(201, 160, 93, 0.35) transparent;
 }
 
 .custom-scrollbar::-webkit-scrollbar {
@@ -60,6 +69,6 @@ select {
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.16);
+  background: rgba(201, 160, 93, 0.28);
 }
 

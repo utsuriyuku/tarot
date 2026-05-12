@@ -3,8 +3,8 @@ import { Stars, Sparkles, Float } from '@react-three/drei';
 export default function Effects() {
   return (
     <>
-      <color attach="background" args={['#04060d']} />
-      <fog attach="fog" args={['#04060d', 8, 24]} />
+      <color attach="background" args={['#0a0807']} />
+      <fog attach="fog" args={['#0a0807', 8, 24]} />
 
       <Stars
         radius={18}
@@ -23,7 +23,7 @@ export default function Effects() {
           size={2.6}
           speed={0.35}
           opacity={0.35}
-          color="#9fd8ff"
+          color="#ead3a2"
         />
       </Float>
       <Float speed={1.5} rotationIntensity={0.2} floatIntensity={1}>
@@ -33,7 +33,7 @@ export default function Effects() {
           size={4}
           speed={0.18}
           opacity={0.16}
-          color="#9f8bff"
+          color="#b38454"
         />
       </Float>
 

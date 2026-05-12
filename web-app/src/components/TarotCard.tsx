@@ -55,7 +55,7 @@ export default function TarotCard({ drawnCard, onDraw, isFlipped }: TarotCardPro
       >
         <boxGeometry args={[2.5, 4, 0.05]} />
         <meshStandardMaterial 
-          color={isFlipped ? "#1a1a2e" : "#0d0d1a"} 
+          color={isFlipped ? "#21160f" : "#120d09"} 
           roughness={0.2} 
           metalness={0.7} 
         />
@@ -64,7 +64,7 @@ export default function TarotCard({ drawnCard, onDraw, isFlipped }: TarotCardPro
         <Text 
           position={[0, 0, 0.03]} 
           fontSize={0.25} 
-          color="#ffd700"
+          color="#e4bf7d"
           maxWidth={2}
           textAlign="center"
         >
@@ -85,8 +85,8 @@ export default function TarotCard({ drawnCard, onDraw, isFlipped }: TarotCardPro
         )}
       </mesh>
       
-      <pointLight position={[0, 0, 2]} intensity={1.5} color="#88aaff" />
-      <pointLight position={[0, 0, -2]} intensity={1.5} color="#ffaa88" />
+      <pointLight position={[0, 0, 2]} intensity={1.4} color="#d7b274" />
+      <pointLight position={[0, 0, -2]} intensity={1.2} color="#8b5c39" />
     </group>
   );
 }

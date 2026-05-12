@@ -60,26 +60,26 @@ function App() {
   };
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#04050a] text-white">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(89,118,255,0.16),_transparent_34%),radial-gradient(circle_at_bottom_left,_rgba(0,181,173,0.16),_transparent_30%),linear-gradient(180deg,_#06070d_0%,_#04050a_48%,_#020308_100%)]" />
-      <div className="pointer-events-none absolute inset-0 opacity-25 [background-image:linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] [background-size:96px_96px] [mask-image:radial-gradient(circle_at_center,black,transparent_85%)]" />
+    <div className="relative min-h-screen overflow-hidden bg-[#0b0907] text-[#f5eee1]">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(210,164,94,0.18),_transparent_30%),radial-gradient(circle_at_bottom_left,_rgba(113,77,44,0.18),_transparent_28%),linear-gradient(180deg,_#16110d_0%,_#0f0b08_45%,_#080605_100%)]" />
+      <div className="paper-grain pointer-events-none absolute inset-0 opacity-40" />
 
       <header className="absolute inset-x-0 top-0 z-30 flex items-center justify-between px-5 py-5 md:px-8 md:py-7">
-        <div className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-[11px] uppercase tracking-[0.35em] text-white/55 backdrop-blur-xl">
+        <div className="rounded-full border border-[#9f7a43]/20 bg-[#221912]/60 px-4 py-2 text-[11px] uppercase tracking-[0.35em] text-[#d5bd8d] shadow-[0_0_24px_rgba(175,126,68,0.08)] backdrop-blur-xl">
           Quantum Tarot Interface
         </div>
         <button
           onClick={() => setIsSettingsOpen(true)}
-          className="flex items-center gap-3 rounded-full border border-white/10 bg-black/35 px-4 py-2 text-[11px] uppercase tracking-[0.28em] text-white/70 backdrop-blur-xl transition hover:border-white/25 hover:bg-white/10 hover:text-white"
+          className="flex items-center gap-3 rounded-full border border-[#9f7a43]/18 bg-[#140f0c]/70 px-4 py-2 text-[11px] uppercase tracking-[0.28em] text-[#dcc59a] backdrop-blur-xl transition hover:border-[#c79a56]/40 hover:bg-[#231811]/80 hover:text-[#f4e5c5]"
         >
-          <span className="h-2 w-2 rounded-full bg-cyan-300 shadow-[0_0_16px_rgba(103,232,249,0.95)]" />
+          <span className="h-2 w-2 rounded-full bg-[#e3c07b] shadow-[0_0_16px_rgba(227,192,123,0.95)]" />
           模型接口
         </button>
       </header>
 
       <main className="relative z-10 flex min-h-screen items-center justify-center px-3 py-20 md:px-8">
-        <section className="relative h-[88vh] min-h-[720px] w-full max-w-[1480px] overflow-hidden rounded-[32px] border border-white/10 bg-black/20 shadow-[0_40px_140px_rgba(0,0,0,0.65)] backdrop-blur-2xl">
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(255,255,255,0.06),_transparent_32%),linear-gradient(135deg,rgba(255,255,255,0.08),transparent_24%,transparent_76%,rgba(255,255,255,0.04))]" />
+        <section className="relative h-[88vh] min-h-[720px] w-full max-w-[1480px] overflow-hidden rounded-[32px] border border-[#8f6d41]/18 bg-[#0f0c09]/45 shadow-[0_40px_140px_rgba(0,0,0,0.68)] backdrop-blur-2xl">
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(240,215,165,0.08),_transparent_34%),linear-gradient(135deg,rgba(255,245,224,0.06),transparent_24%,transparent_74%,rgba(185,138,80,0.06))]" />
 
           <div className="absolute inset-0 z-0 transition-opacity duration-1000">
             <Canvas camera={{ position: [0, 0, 8], fov: 45 }}>
@@ -89,24 +89,24 @@ function App() {
           </div>
 
           <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-full max-w-[560px] p-6 md:p-10">
-            <div className="max-w-[460px] rounded-[28px] border border-white/10 bg-black/28 p-6 shadow-[0_24px_80px_rgba(0,0,0,0.35)] backdrop-blur-xl md:p-8">
-              <p className="text-[11px] uppercase tracking-[0.4em] text-cyan-200/70">Nonlinear Reading Engine</p>
-              <h1 className="mt-4 font-serif text-5xl font-semibold leading-none text-white md:text-7xl">
+            <div className="max-w-[460px] rounded-[28px] border border-[#a07a46]/16 bg-[linear-gradient(180deg,rgba(31,22,16,0.86),rgba(18,13,10,0.82))] p-6 shadow-[0_24px_80px_rgba(0,0,0,0.4)] backdrop-blur-xl md:p-8">
+              <p className="text-[11px] uppercase tracking-[0.4em] text-[#d8bc88]">Nonlinear Reading Engine</p>
+              <h1 className="mt-4 font-serif text-5xl font-semibold leading-none text-[#f8efdc] md:text-7xl">
                 Quantum Tarot
               </h1>
-              <p className="mt-5 text-sm leading-7 text-white/72 md:text-[15px]">
+              <p className="mt-5 text-sm leading-7 text-[#d5c6ac] md:text-[15px]">
                 这不是一个把牌义贴给你的占卜页，而是把问题、卡面与未来牵引感放在同一张界面里。你先给出意图，系统再允许你触碰坍缩。
               </p>
 
-              <div className="mt-7 flex flex-wrap gap-3 text-xs tracking-[0.16em] text-white/70">
-                <span className="rounded-full border border-white/10 bg-white/5 px-3 py-2">Three.js 粒子场</span>
-                <span className="rounded-full border border-white/10 bg-white/5 px-3 py-2">大模型解牌</span>
-                <span className="rounded-full border border-white/10 bg-white/5 px-3 py-2">正逆位动态呈现</span>
+              <div className="mt-7 flex flex-wrap gap-3 text-xs tracking-[0.16em] text-[#d9c49a]">
+                <span className="rounded-full border border-[#9e7947]/20 bg-[#271c14]/70 px-3 py-2">Three.js 粒子场</span>
+                <span className="rounded-full border border-[#9e7947]/20 bg-[#271c14]/70 px-3 py-2">大模型解牌</span>
+                <span className="rounded-full border border-[#9e7947]/20 bg-[#271c14]/70 px-3 py-2">正逆位动态呈现</span>
               </div>
 
-              <div className="mt-8 rounded-2xl border border-white/10 bg-white/[0.04] p-4">
-                <p className="text-[11px] uppercase tracking-[0.28em] text-white/45">Current Ritual State</p>
-                <p className="mt-3 text-sm leading-6 text-white/78">
+              <div className="mt-8 rounded-2xl border border-[#8f6d41]/18 bg-[#19120e]/85 p-4">
+                <p className="text-[11px] uppercase tracking-[0.28em] text-[#b89968]">Current Ritual State</p>
+                <p className="mt-3 text-sm leading-6 text-[#e0d1b6]">
                   {isFlipped
                     ? "牌面已坍缩。右侧面板正在给出本轮解读。"
                     : isQuestionLocked
@@ -117,7 +117,7 @@ function App() {
             </div>
           </div>
 
-          <div className="pointer-events-none absolute bottom-6 left-6 z-10 hidden rounded-2xl border border-white/10 bg-black/30 p-4 text-[11px] uppercase tracking-[0.24em] text-white/45 backdrop-blur-xl md:block">
+          <div className="pointer-events-none absolute bottom-6 left-6 z-10 hidden rounded-2xl border border-[#8f6d41]/18 bg-[#130f0c]/75 p-4 text-[11px] uppercase tracking-[0.24em] text-[#b89968] backdrop-blur-xl md:block">
             01 锁定问题 · 02 触碰卡面 · 03 等待解牌
           </div>
 
@@ -129,7 +129,7 @@ function App() {
           </div>
 
           {isQuestionLocked && !isFlipped && (
-            <div className="pointer-events-none absolute bottom-28 left-1/2 z-20 -translate-x-1/2 rounded-full border border-cyan-300/20 bg-cyan-300/10 px-5 py-3 text-xs tracking-[0.28em] text-cyan-100 shadow-[0_0_40px_rgba(34,211,238,0.2)]">
+            <div className="pointer-events-none absolute bottom-28 left-1/2 z-20 -translate-x-1/2 rounded-full border border-[#b28643]/25 bg-[#2c1d0d]/90 px-5 py-3 text-xs tracking-[0.28em] text-[#efd6a0] shadow-[0_0_40px_rgba(178,134,67,0.16)]">
               意图已锁定，点击卡牌开始本轮观测
             </div>
           )}
