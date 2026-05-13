@@ -98,15 +98,15 @@ export default function InterpretationPanel({ cards, spreadName, spreadSummary, 
   }, [text, isThinking]);
 
   return (
-    <div className="h-full w-full p-4 pointer-events-auto md:p-6">
+    <div className="h-full w-full p-3 pointer-events-auto md:p-6">
       <div className="flex h-full flex-col overflow-hidden rounded-[30px] border border-[#8f6d41]/18 bg-[linear-gradient(180deg,rgba(24,18,14,0.96),rgba(13,10,8,0.92))] shadow-[-24px_0_80px_rgba(0,0,0,0.55)] backdrop-blur-2xl">
-        <div className="border-b border-[#8f6d41]/16 px-6 py-6 md:px-8 md:py-7">
-          <div className="flex items-start justify-between gap-6">
+        <div className="border-b border-[#8f6d41]/16 px-5 py-5 md:px-8 md:py-7">
+          <div className="flex items-start justify-between gap-4 md:gap-6">
             <div>
               <p className="font-mono text-[11px] uppercase tracking-[0.34em] text-[#b79665]">
                 {isThinking ? 'Editorial Draft In Progress' : 'Quantum Tarot Review'}
               </p>
-              <h2 className="mt-3 text-4xl font-semibold tracking-[0.04em] text-[#f7ecd6]">
+              <h2 className="mt-3 text-3xl font-semibold tracking-[0.04em] text-[#f7ecd6] md:text-4xl">
                 {spreadName}
               </h2>
               <div className="mt-3 flex flex-wrap items-center gap-3 text-xs uppercase tracking-[0.26em] text-[#ceb996]">
@@ -122,7 +122,7 @@ export default function InterpretationPanel({ cards, spreadName, spreadSummary, 
         </div>
 
         <div className="grid min-h-0 flex-1 grid-cols-1 gap-0 lg:grid-cols-[168px_minmax(0,1fr)]">
-          <aside className="border-b border-[#8f6d41]/14 bg-[#140f0c]/82 px-6 py-6 lg:border-b-0 lg:border-r lg:px-5">
+          <aside className="border-b border-[#8f6d41]/14 bg-[#140f0c]/82 px-5 py-5 lg:border-b-0 lg:border-r lg:px-5 lg:py-6">
             <div className="space-y-6">
               <div>
                 <p className="text-[10px] uppercase tracking-[0.3em] text-[#9e7d4f]">Card State</p>
@@ -148,7 +148,7 @@ export default function InterpretationPanel({ cards, spreadName, spreadSummary, 
             </div>
           </aside>
 
-          <div className="min-h-0 px-6 py-6 md:px-8 md:py-7">
+          <div className="min-h-0 px-5 py-5 md:px-8 md:py-7">
             <div className="mb-6 flex items-center justify-between border-b border-[#8f6d41]/14 pb-4">
               <p className="text-[11px] uppercase tracking-[0.32em] text-[#b79665]">
                 {isThinking ? 'Computing Collapse' : 'Feature Article'}
@@ -158,7 +158,7 @@ export default function InterpretationPanel({ cards, spreadName, spreadSummary, 
               </p>
             </div>
 
-            <div className="custom-scrollbar h-[calc(88vh-280px)] min-h-[340px] overflow-y-auto pr-2 lg:h-[calc(88vh-245px)]">
+            <div className="custom-scrollbar max-h-[42vh] min-h-[220px] overflow-y-auto pr-2 md:h-[calc(88vh-280px)] md:min-h-[340px] md:max-h-none lg:h-[calc(88vh-245px)]">
               {isThinking ? (
                 <div className="flex h-full flex-col items-center justify-center opacity-60">
                   <span className="mb-5 h-10 w-10 rounded-full border-4 border-[#6d5735]/20 border-t-[#e0bf85] animate-spin"></span>

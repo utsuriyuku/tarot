@@ -88,3 +88,16 @@
 - **当前判断**：线上页面目前没有直接读取这次本地 `gh-pages` 发布结果，更可能仍由既有的 GitHub Pages / Actions 主分支流程控制。因此，如果要把当前改动真正推到线上，需要把源码变更提交并推送到远端主分支，或在 GitHub 侧改动 Pages 来源配置。
 - **主分支发布已执行**：随后将当前改动提交为 `a01218e` 并推送到 `main`，远端确认仓库已迁移到 `https://github.com/utsuriyuku/tarot.git`，同时触发了 GitHub Actions 中的 `Deploy to GitHub Pages #12`。
 - **最终线上验收**：再次抓取 `https://utsuriyuku.github.io/tarot/`，已看到新版页面文案，包括“Spread Selection”“单牌切片 / 三相展开 / 五镜牌阵”“01 锁定问题 · 02 依次翻牌 · 03 查看分位解读”，说明本轮版本已经对外可见。
+
+### 第十五轮讨论 (2026-05-13)
+- **新阶段待办 4 完成：优化移动端牌阵**。修复了移动端主舞台仍按桌面策略垂直居中导致的顶部裁切问题；在手机宽度下，页面不再把整块舞台向上挤出视口。
+- **布局层调整**：在 `web-app/src/App.tsx` 中加入 viewport 宽度监听，移动端改为顶部对齐布局，并将舞台高度、信息卡尺寸、底部问题输入区和提示胶囊统一收紧为小屏尺寸。
+- **牌阵层调整**：为 `single / triad / fivefold` 三种牌阵补上移动端专用的 3D 坐标、缩放和相机参数，避免沿用桌面坐标导致牌位在窄屏上过散或互相挤压。
+- **面板层调整**：同步压缩 `QuestionInput.tsx` 与 `InterpretationPanel.tsx` 的移动端宽度、标题字号与滚动区域高度，让抽牌前后两种状态都能在小屏下正常阅读与操作。
+- **验证结果**：本地 `npm run build` 通过。浏览器工具无法稳定切换到真正的手机视口尺寸，但当前修复已覆盖此前导致移动端裁切的主因。
+
+### 第十六轮讨论 (2026-05-13)
+- **新阶段待办 5 完成：压缩首屏包体积**。首屏不再同步加载全部交互后代码，而是改为页面框架先到、重资产按需进入。
+- **按需拆分策略**：在 `web-app/src/App.tsx` 中将 `SettingsPanel`、`InterpretationPanel`、整副牌数据 `tarotData.ts`、以及解牌服务 `llm.ts` 全部改为延迟加载；只有在打开配置、展开解读或真正开始抽牌时才请求对应代码。
+- **3D 舞台分离**：新增 `web-app/src/components/TarotScene.tsx`，把 `Canvas + Effects + TarotCard` 这组 Three.js 场景整体拆出主入口，避免首页框架和 3D 场景被打进同一个首包里。
+- **验证结果**：本地 `npm run build` 通过。构建产物中主入口 `index` 已从约 1.2 MB 降到约 197 KB，而重的 3D 场景被拆到独立的 `TarotScene` chunk 中；当前仍有大 chunk 告警，但它已经不再阻塞首页框架首达。
