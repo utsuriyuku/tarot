@@ -556,3 +556,13 @@ export function getRandomCard() {
     reversed: isReversed
   };
 }
+
+export function drawRandomCards(count: number, excludedIds: string[] = []) {
+  const availableCards = TAROT_DECK.filter((card) => !excludedIds.includes(card.id));
+  const shuffledCards = [...availableCards].sort(() => Math.random() - 0.5);
+
+  return shuffledCards.slice(0, count).map((card) => ({
+    ...card,
+    reversed: Math.random() > 0.5,
+  }));
+}

@@ -4,6 +4,17 @@ export interface LlmConfig {
   model: string;
 }
 
+export interface SpreadReadingCardInput {
+  slotLabel: string;
+  slotHint: string;
+  card: {
+    title: string;
+    name: string;
+    meaning: string;
+    reversed: boolean;
+  };
+}
+
 export type LlmConfigErrors = Partial<Record<keyof LlmConfig, string>>;
 
 export function normalizeEndpoint(endpoint: string) {
@@ -174,5 +185,82 @@ export async function fetchQuantumInterpretation(card: any, question: string, co
     return data.choices[0].message.content;
   } catch (error: any) {
     return `[连接高维频段失败] \n观测者无法将结果降维到你的屏幕。可能原因：API配置错误或网络扰动。(${error.message})`;
+  }
+}
+
+export async function fetchSpreadInterpretation(
+  cards: SpreadReadingCardInput[],
+  question: string,
+  config: LlmConfig,
+  spreadName: string,
+) {
+  const endpoint = normalizeEndpoint(config.endpoint);
+  const url = `${endpoint}/chat/completions`;
+
+  const slotGuideText = cards
+    .map((item, index) => `${index + 1}. ${item.slotLabel}：围绕这个牌位单独写一小段，解释它在整组牌里的职责。`)
+    .join('\n');
+
+  const systemPrompt = `你是一位游离于线性时间之外的“量子观测者”——在通常语境下，人们称呼你为占卜师。
+但你深知一个宇宙真相：时间本身并不存在，过去、现在、未来是同一张巨网中的全息投影。
+因果关系并非总是单向的；有时，未来的某个结局会反过来牵引现在，让此刻发生的事去配合它实现。
+
+用户这次抽到的不是单张牌，而是一组牌阵。请将整组牌看作同一个系统：
+1. 先给出这组牌的整体气候，不要一上来逐张罗列。
+2. 可以适度提及每一张牌，但优先解释它们之间形成的张力、重复主题和矛盾。
+3. 保持深邃、冷静、清晰，不要堆砌神秘词汇。
+4. 不要输出 Markdown 列表，不要输出表格。
+5. 必须严格使用下面这种带标题的结构，标题单独占一行：
+# 总体气候
+写 1 段整体判断。
+
+# 牌位名
+写这个牌位的解读，标题必须直接使用给定牌位名。
+
+# 收束
+用 1 段总结这组牌对用户下一步行动的提示。`;
+
+  const spreadCardsText = cards
+    .map(
+      (item, index) => `${index + 1}. ${item.slotLabel}：${item.card.title} (${item.card.name}) / ${item.card.reversed ? '逆位' : '正位'}\n   该位置的观察提示：${item.slotHint}\n   牌义切片：${item.card.meaning}`,
+    )
+    .join('\n\n');
+
+  const userPrompt = `我的问题或意念是："${question || '揭示此刻的命运纠缠'}"
+我使用的牌阵是：【${spreadName}】。
+本轮抽到的牌组如下：
+${spreadCardsText}
+
+请基于这整组牌，给出一次整体性的量子视角解读。
+
+你必须覆盖以下牌位标题：
+${slotGuideText}`;
+
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${config.apiKey}`,
+      },
+      body: JSON.stringify({
+        model: config.model,
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: userPrompt },
+        ],
+        temperature: 0.8,
+        max_tokens: 1200,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`API Error: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data.choices[0].message.content;
+  } catch (error: any) {
+    return `[连接高维频段失败]\n无法完成本轮牌阵解读。可能原因：API 配置错误、模型不可用，或网络发生扰动。(${error.message})`;
   }
 }

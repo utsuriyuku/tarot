@@ -8,6 +8,11 @@ type TarotCardProps = {
   onDraw: () => void;
   isFlipped: boolean;
   isActivated: boolean;
+  isClickable?: boolean;
+  slotLabel?: string;
+  basePosition?: [number, number, number];
+  baseRotationZ?: number;
+  cardScale?: number;
 };
 
 // 独立的纹理加载组件，利用 Suspense 处理异步加载
@@ -21,7 +26,17 @@ function CardFrontImage({ url }: { url: string }) {
   );
 }
 
-export default function TarotCard({ drawnCard, onDraw, isFlipped, isActivated }: TarotCardProps) {
+export default function TarotCard({
+  drawnCard,
+  onDraw,
+  isFlipped,
+  isActivated,
+  isClickable = true,
+  slotLabel,
+  basePosition = [0, 0, 0],
+  baseRotationZ = 0,
+  cardScale = 1,
+}: TarotCardProps) {
   const stageRef = useRef<THREE.Group>(null);
   const meshRef = useRef<THREE.Mesh>(null);
   const auraInnerRef = useRef<THREE.Mesh>(null);
@@ -33,7 +48,7 @@ export default function TarotCard({ drawnCard, onDraw, isFlipped, isActivated }:
   const burstRef = useRef(0);
   const activationPulseRef = useRef(0);
 
-  useCursor(hovered);
+  useCursor(hovered && isActivated && isClickable);
 
   useEffect(() => {
     if (isActivated) {
@@ -42,7 +57,7 @@ export default function TarotCard({ drawnCard, onDraw, isFlipped, isActivated }:
   }, [isActivated]);
 
   const handleCardClick = () => {
-    if (!isActivated || isFlipped) {
+    if (!isActivated || isFlipped || !isClickable) {
       return;
     }
     burstRef.current = 1;
@@ -55,17 +70,19 @@ export default function TarotCard({ drawnCard, onDraw, isFlipped, isActivated }:
     burstRef.current = Math.max(0, burstRef.current - delta * 1.8);
     activationPulseRef.current = Math.max(0, activationPulseRef.current - delta * 0.85);
 
-    const baseScale = isActivated ? 1 : 0.72;
-    const entranceY = isActivated ? 0 : -2.4;
-    const entranceZ = isActivated ? 0 : -2.8;
+    const baseScale = isActivated ? cardScale : cardScale * 0.72;
+    const entranceX = basePosition[0];
+    const entranceY = isActivated ? basePosition[1] : basePosition[1] - 2.4;
+    const entranceZ = isActivated ? basePosition[2] : basePosition[2] - 2.8;
     const entranceRotX = isActivated ? 0 : 0.45;
-    const entranceRotZ = isActivated ? 0 : -0.24;
+    const entranceRotZ = isActivated ? baseRotationZ : baseRotationZ - 0.24;
     const hoverLift = hovered && isActivated && !isFlipped ? 0.22 : 0;
 
     const stageScale = baseScale + burstRef.current * 0.12 + activationPulseRef.current * 0.08;
     stageRef.current.scale.x += (stageScale - stageRef.current.scale.x) * delta * 4;
     stageRef.current.scale.y += (stageScale - stageRef.current.scale.y) * delta * 4;
     stageRef.current.scale.z += (stageScale - stageRef.current.scale.z) * delta * 4;
+    stageRef.current.position.x += (entranceX - stageRef.current.position.x) * delta * 4;
     stageRef.current.position.y += (entranceY + hoverLift - stageRef.current.position.y) * delta * 4;
     stageRef.current.position.z += (entranceZ - stageRef.current.position.z) * delta * 3.2;
     stageRef.current.rotation.x += (entranceRotX - stageRef.current.rotation.x) * delta * 3.2;
@@ -87,7 +104,7 @@ export default function TarotCard({ drawnCard, onDraw, isFlipped, isActivated }:
     }
 
     const pulse = 0.5 + Math.sin(state.clock.elapsedTime * 1.7) * 0.5;
-    const glowStrength = (isActivated ? 0.28 : 0.08) + (hovered ? 0.16 : 0) + burstRef.current * 0.65 + activationPulseRef.current * 0.42;
+    const glowStrength = (isActivated ? 0.28 : 0.08) + (hovered && isClickable ? 0.16 : 0) + burstRef.current * 0.65 + activationPulseRef.current * 0.42;
 
     if (auraInnerRef.current) {
       auraInnerRef.current.scale.setScalar(1.05 + glowStrength * 0.55 + pulse * 0.03);
@@ -158,6 +175,18 @@ export default function TarotCard({ drawnCard, onDraw, isFlipped, isActivated }:
         >
           QUANTUM
         </Text>
+
+        {slotLabel && (
+          <Text
+            position={[0, -2.55, 0.03]}
+            fontSize={0.13}
+            color={isClickable && isActivated && !isFlipped ? '#f3d7a2' : '#b28d5c'}
+            maxWidth={4}
+            textAlign="center"
+          >
+            {slotLabel}
+          </Text>
+        )}
         
         {/* 卡面：翻转后展示，带有一点厚度偏移Z轴以免与盒子重叠 (-0.03) */}
         {drawnCard && (
