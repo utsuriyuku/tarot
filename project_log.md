@@ -86,3 +86,5 @@
 - **部署尝试结果**：在 `web-app` 目录重新执行 `npm run deploy`，本地 `gh-pages -d dist` 返回 `Published`，说明静态产物成功发布到 gh-pages 流程。
 - **线上校验结果**：直接抓取 `https://utsuriyuku.github.io/tarot/` 后，页面仍返回旧版 HTML，引用的资源仍是旧哈希 `index-yboJgVis.js` / `index-CWdygvuN.css`，未切到本轮最新构建产物。
 - **当前判断**：线上页面目前没有直接读取这次本地 `gh-pages` 发布结果，更可能仍由既有的 GitHub Pages / Actions 主分支流程控制。因此，如果要把当前改动真正推到线上，需要把源码变更提交并推送到远端主分支，或在 GitHub 侧改动 Pages 来源配置。
+- **主分支发布已执行**：随后将当前改动提交为 `a01218e` 并推送到 `main`，远端确认仓库已迁移到 `https://github.com/utsuriyuku/tarot.git`，同时触发了 GitHub Actions 中的 `Deploy to GitHub Pages #12`。
+- **最终线上验收**：再次抓取 `https://utsuriyuku.github.io/tarot/`，已看到新版页面文案，包括“Spread Selection”“单牌切片 / 三相展开 / 五镜牌阵”“01 锁定问题 · 02 依次翻牌 · 03 查看分位解读”，说明本轮版本已经对外可见。
