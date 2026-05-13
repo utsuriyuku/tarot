@@ -101,3 +101,8 @@
 - **按需拆分策略**：在 `web-app/src/App.tsx` 中将 `SettingsPanel`、`InterpretationPanel`、整副牌数据 `tarotData.ts`、以及解牌服务 `llm.ts` 全部改为延迟加载；只有在打开配置、展开解读或真正开始抽牌时才请求对应代码。
 - **3D 舞台分离**：新增 `web-app/src/components/TarotScene.tsx`，把 `Canvas + Effects + TarotCard` 这组 Three.js 场景整体拆出主入口，避免首页框架和 3D 场景被打进同一个首包里。
 - **验证结果**：本地 `npm run build` 通过。构建产物中主入口 `index` 已从约 1.2 MB 降到约 197 KB，而重的 3D 场景被拆到独立的 `TarotScene` chunk 中；当前仍有大 chunk 告警，但它已经不再阻塞首页框架首达。
+
+### 第十七轮讨论 (2026-05-13)
+- **性能优化版已部署**：将首屏包体积优化提交为 `adc1ee1` 并推送到 `main`，触发 GitHub Actions 中的 `Deploy to GitHub Pages #14`。
+- **工作流结果**：GitHub Actions 运行成功，部署页面显示 `Status: Success`，总耗时约 34 秒。
+- **线上资源验收**：直接抓取 `https://utsuriyuku.github.io/tarot/`，当前 HTML 已引用新的入口资源 `index-fCdrqgaA.js` 与样式 `index-DIJrD5cc.css`，说明这轮按需加载与场景拆分版本已经正式生效。
