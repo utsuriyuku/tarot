@@ -59,6 +59,34 @@ async function readErrorMessage(response: Response) {
   }
 }
 
+async function testChatCompletion(endpoint: string, config: LlmConfig) {
+  const completionResponse = await fetch(`${endpoint}/chat/completions`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${config.apiKey}`,
+    },
+    body: JSON.stringify({
+      model: config.model,
+      messages: [{ role: 'user', content: 'ping' }],
+      temperature: 0,
+      max_tokens: 1,
+    }),
+  });
+
+  if (!completionResponse.ok) {
+    return {
+      ok: false,
+      message: await readErrorMessage(completionResponse),
+    };
+  }
+
+  return {
+    ok: true,
+    message: `连接成功，模型 ${config.model} 已通过最小请求测试。`,
+  };
+}
+
 export async function testModelConnection(config: LlmConfig) {
   const errors = validateLlmConfig(config);
   if (hasLlmConfigErrors(errors)) {
@@ -84,9 +112,18 @@ export async function testModelConnection(config: LlmConfig) {
         : [];
 
       if (availableModels.length > 0 && !availableModels.includes(config.model)) {
+        const completionProbe = await testChatCompletion(endpoint, config);
+
+        if (completionProbe.ok) {
+          return {
+            ok: true,
+            message: `连接成功，模型 ${config.model} 虽未出现在 /models 列表中，但已通过最小请求测试。`,
+          };
+        }
+
         return {
           ok: false,
-          message: `接口可达，但未找到模型 ${config.model}。可用模型示例：${availableModels.slice(0, 4).join('、')}`,
+          message: `接口可达，但未找到模型 ${config.model}。可用模型示例：${availableModels.slice(0, 4).join('、')}。同时最小请求测试失败：${completionProbe.message}`,
         };
       }
 
@@ -105,31 +142,7 @@ export async function testModelConnection(config: LlmConfig) {
       };
     }
 
-    const completionResponse = await fetch(`${endpoint}/chat/completions`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${config.apiKey}`,
-      },
-      body: JSON.stringify({
-        model: config.model,
-        messages: [{ role: 'user', content: 'ping' }],
-        temperature: 0,
-        max_tokens: 1,
-      }),
-    });
-
-    if (!completionResponse.ok) {
-      return {
-        ok: false,
-        message: await readErrorMessage(completionResponse),
-      };
-    }
-
-    return {
-      ok: true,
-      message: `连接成功，模型 ${config.model} 已通过最小请求测试。`,
-    };
+    return await testChatCompletion(endpoint, config);
   } catch (error) {
     return {
       ok: false,
