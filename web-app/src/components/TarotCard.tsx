@@ -1,5 +1,5 @@
-﻿import { useEffect, useRef, useState, Suspense } from "react";
-import { useFrame, useLoader } from "@react-three/fiber";
+﻿import { useEffect, useRef, useState } from "react";
+import { useFrame } from "@react-three/fiber";
 import { Text, useCursor } from "@react-three/drei";
 import * as THREE from "three";
 
@@ -15,9 +15,75 @@ type TarotCardProps = {
   cardScale?: number;
 };
 
-// 独立的纹理加载组件，利用 Suspense 处理异步加载
-function CardFrontImage({ url }: { url: string }) {
-  const texture = useLoader(THREE.TextureLoader, url);
+function CardFrontImage({
+  url,
+  title,
+  subtitle,
+}: {
+  url?: string;
+  title: string;
+  subtitle: string;
+}) {
+  const [texture, setTexture] = useState<THREE.Texture | null>(null);
+  const [hasTextureError, setHasTextureError] = useState(false);
+
+  useEffect(() => {
+    if (!url) {
+      setTexture(null);
+      setHasTextureError(true);
+      return;
+    }
+
+    let disposed = false;
+    const loader = new THREE.TextureLoader();
+
+    setTexture(null);
+    setHasTextureError(false);
+
+    loader.load(
+      url,
+      (loadedTexture) => {
+        if (disposed) {
+          loadedTexture.dispose();
+          return;
+        }
+
+        loadedTexture.colorSpace = THREE.SRGBColorSpace;
+        setTexture(loadedTexture);
+      },
+      undefined,
+      () => {
+        if (!disposed) {
+          setHasTextureError(true);
+        }
+      },
+    );
+
+    return () => {
+      disposed = true;
+    };
+  }, [url]);
+
+  if (!texture || hasTextureError) {
+    return (
+      <group position={[0, 0, 0.03]}>
+        <mesh>
+          <planeGeometry args={[2.3, 3.8]} />
+          <meshStandardMaterial color="#23170f" roughness={0.72} metalness={0.22} />
+        </mesh>
+        <Text position={[0, 0.5, 0.02]} fontSize={0.2} color="#f0d5a1" maxWidth={1.7} textAlign="center">
+          {title}
+        </Text>
+        <Text position={[0, -0.6, 0.02]} fontSize={0.17} color="#c7a879" maxWidth={1.7} textAlign="center">
+          {subtitle}
+        </Text>
+        <Text position={[0, -1.45, 0.02]} fontSize={0.1} color="#9d7b4e" maxWidth={1.8} textAlign="center">
+          IMAGE UNAVAILABLE
+        </Text>
+      </group>
+    );
+  }
+
   return (
     <mesh position={[0, 0, 0.03]} rotation={[0, 0, 0]}>
       <planeGeometry args={[2.3, 3.8]} />
@@ -191,13 +257,11 @@ export default function TarotCard({
         {/* 卡面：翻转后展示，带有一点厚度偏移Z轴以免与盒子重叠 (-0.03) */}
         {drawnCard && (
           <group position={[0, 0, -0.03]} rotation={[0, Math.PI, 0]}>
-            <Suspense fallback={
-              <Text position={[0, 0, 0.03]} fontSize={0.2} color="#ffffff">
-                LOADING COLLAPSE...
-              </Text>
-            }>
-              {drawnCard.img && <CardFrontImage url={drawnCard.img} />}
-            </Suspense>
+            <CardFrontImage
+              url={drawnCard.img}
+              title={drawnCard.title}
+              subtitle={drawnCard.name}
+            />
           </group>
         )}
       </mesh>
